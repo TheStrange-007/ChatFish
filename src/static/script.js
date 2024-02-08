@@ -11,102 +11,108 @@ const MD = window.markdownit();
 
 
 msgerForm.addEventListener("submit", event => {
-  event.preventDefault();
+    event.preventDefault();
 
-  const msgText = msgerInput.value;
-  if (!msgText) return;
-  appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
-  appendThinkingMessage();
-  msgerChat.scrollTop = msgerChat.scrollHeight;
+    const msgText = msgerInput.value;
+    if (!msgText) return;
+    appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
+    appendThinkingMessage();
+    msgerChat.scrollTop = msgerChat.scrollHeight;
 
-  socket.send(msgText);
+    socket.send(msgText);
 
-  msgerInput.value = "";
+    msgerInput.value = "";
 });
 
-socket.on('message', function(text) {
+socket.on('message', function (text) {
     removeThinkingMessage();
     appendMessage(BOT_NAME, BOT_IMG, "left", text);
     msgerChat.scrollTop = msgerChat.scrollHeight;
 });
 
 function appendThinkingMessage() {
-  const thinkingMessage = `
+    const thinkingMessage = `
     <div class="msg thinking-msg">
       <div class="msg-bubble">
         <div class="msg-text">Thinking...</div>
       </div>
     </div>
   `;
-  msgerChat.insertAdjacentHTML("beforeend", thinkingMessage);
+    msgerChat.insertAdjacentHTML("beforeend", thinkingMessage);
 }
 
 function removeThinkingMessage() {
-  const thinkingMsgElement = document.querySelector('.thinking-msg');
-  if (thinkingMsgElement) {
-    thinkingMsgElement.remove();
-  }
+    const thinkingMsgElement = document.querySelector('.thinking-msg');
+    if (thinkingMsgElement) {
+        thinkingMsgElement.remove();
+    }
 }
 
 function appendMessage(name, img, side, text) {
-  const isBotMessage = side === "left";
+    const isBotMessage = side === "left";
 
-  msgerChat.scrollTop = msgerChat.scrollHeight;
+    msgerChat.scrollTop = msgerChat.scrollHeight;
 
-  const parsedText = parseMarkdownAndCodeBlocks(text);
+    const msgBubble = document.createElement("div");
+    msgBubble.classList.add("msg-bubble");
 
-  const msgHTML = `
-    <div class="msg ${side}-msg">
-      <div class="msg-img" style="background-image: url(${img})"></div>
-
-      <div class="msg-bubble">
-        <div class="msg-info">
-          <div class="msg-info-name">${name}</div>
-          <div class="msg-info-time">${formatDate(new Date())}</div>
-        </div>
-
-        <div class="msg-text">${parsedText}</div>
-      </div>
-    </div>
+    const msgInfo = document.createElement("div");
+    msgInfo.classList.add("msg-info");
+    msgInfo.innerHTML = `
+    <div class="msg-info-name">${name}</div>
+    <div class="msg-info-time">${formatDate(new Date())}</div>
   `;
 
-  if (isBotMessage) {
-    msgerChat.insertAdjacentHTML("beforeend", msgHTML);
+    const msgText = document.createElement("div");
+    msgText.classList.add("msg-text");
+
+    if (isBotMessage) {
+        msgText.innerHTML = parseMarkdownAndCodeBlocks(text);
+    } else {
+        msgText.textContent = text;
+    }
+
+    msgBubble.appendChild(msgInfo);
+    msgBubble.appendChild(msgText);
+
+    const msg = document.createElement("div");
+    msg.classList.add("msg", `${side}-msg`);
+    msg.innerHTML = `
+    <div class="msg-img" style="background-image: url(${img})"></div>
+  `;
+    msg.appendChild(msgBubble);
+
+    msgerChat.appendChild(msg);
     msgerChat.scrollTop = msgerChat.scrollHeight;
-  } else {
-    // If it's not a bot message, directly insert the message
-    msgerChat.insertAdjacentHTML("beforeend", msgHTML);
-    msgerChat.scrollTop = msgerChat.scrollHeight;
-  }
 }
 
 function parseMarkdownAndCodeBlocks(text) {
-  const md = window.markdownit({
-    html: true,
-    breaks: true,
-    langPrefix: 'hljs language-',
-    highlight: function (str, lang) {
-      if (lang && hljs.getLanguage(lang)) {
-        try {
-          return '<pre class="hljs"><code>' + hljs.highlight(lang, str, true).value + '</code></pre>';
-        } catch (__) {}
-      }
-      return '';
-    }
-  });
-  const renderedText = md.render(text);
-  const trimmedText = renderedText.trim();
+    const md = window.markdownit({
+        html: true,
+        breaks: true,
+        langPrefix: 'hljs language-',
+        highlight: function (str, lang) {
+            if (lang && hljs.getLanguage(lang)) {
+                try {
+                    return '<pre class="hljs"><code>' + hljs.highlight(lang, str, true).value + '</code></pre>';
+                } catch (__) { }
+            }
+            return '';
+        }
+    });
+    const renderedText = md.render(text);
+    const trimmedText = renderedText.trim();
 
-  return trimmedText;
+    return trimmedText;
 }
 
 function get(selector, root = document) {
-  return root.querySelector(selector);
+    return root.querySelector(selector);
 }
 
 function formatDate(date) {
-  const h = "0" + date.getHours();
-  const m = "0" + date.getMinutes();
+    const h = "0" + date.getHours();
+    const m = "0" + date.getMinutes();
 
-  return `${h.slice(-2)}:${m.slice(-2)}`;
+    return `${h.slice(-2)}:${m.slice(-2)}`;
 }
