@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="https://png.pngtree.com/png-vector/20221230/ourmid/pngtree-catfish-logo-png-image_6543347.png">
+	
+		<title>ChatFish</title>
+		
+		<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/default.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+	</head>
+    <body>
+    	<section class="msger">
+  <header class="msger-header">
+    <div class="msger-header-title">
+      <i class="fas fa-comment-alt"></i> Chit Chat
+    </div>
+    <div class="msger-header-options">
+      <span><i class="fas fa-cog"></i></span>
+    </div>
+  </header>
+
+  <main class="msger-chat">
+
+    <div class="alert alert-warning alert-dismissible fade in">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      • This bot may simulate human behavior, but it is not human. <hr>
+      • Do not disclose any confidential information, even if it <b>requests</b> it.
+    </div>
+
+  </main>
+
+  <form class="msger-inputarea">
+    <input name="msg" type="text" autocomplete="off" class="msger-input" placeholder="Click To Type">
+    <button type="submit" class="msger-send-btn">Send</button>
+  </form>
+</section>  
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+        <script type="text/javascript" charset="utf-8">
+
+          var socket = io();
+          socket.on('connect', function() {
+              console.log("connection established");
+          });
+          const PERSON_NAME = "{{name}}";
+      </script>
+
+      <script src="{{url_for('static', filename='script.js')}}"></script>
+        
+      
+      <script>
+        // to get rid of file resubmission popup
+        if ( window.history.replaceState ) {
+          window.history.replaceState( null, null, window.location.href );
+        }
+      </script>
+
+    </body>
+</html>

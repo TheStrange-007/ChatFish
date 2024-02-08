@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="https://png.pngtree.com/png-vector/20221230/ourmid/pngtree-catfish-logo-png-image_6543347.png">
+
+  <meta property="og:title" content="ChatFish" />
+  <meta property="og:image" content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKGujKrLZ2hI3REczLenBIGZCpjDkxM0eFMg&usqp=CAU" />
+
+  <title>ChatFish</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='loginStyle.css')}}">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="bg"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+
+<form method="post" action="{{url_for('login')}}">
+  <div class="form-field">
+    <input name="username" type="text" autocomplete="off" placeholder="Your Name" required/>
+  </div>
+
+  <div class="form-field">
+    <button class="btn" type="submit">GO!</button>
+  </div>
+</form>
+<!-- partial -->
+  
+</body>
+</html>
