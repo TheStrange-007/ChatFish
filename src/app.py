@@ -12,23 +12,22 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
+
 # Directory to store user conversations and cookies
 DATA_DIR = "data"
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
+
 # Log in to Hugging Face and obtain authorization
-
-
 def login_to_hugging_face():
     email = os.getenv("EMAIL")
     passwd = os.getenv("PASSWD")
     sign = Login(email, passwd)
     return sign.login()
 
+
 # Load or save cookies
-
-
 def load_or_save_cookies():
     cookies_file = os.path.join(DATA_DIR, "cookies.pkl")
     try:
@@ -45,9 +44,8 @@ def load_or_save_cookies():
 cookies = load_or_save_cookies()
 chatbot = hugchat.ChatBot(cookies=cookies.get_dict())
 
+
 # Function to load or create a conversation for a user
-
-
 def load_or_create_conversation(user_id):
     conversation_file = os.path.join(DATA_DIR, f"{user_id}_conversation.pkl")
     try:
@@ -64,9 +62,8 @@ def load_or_create_conversation(user_id):
             save_conversation(conversation_file, conversation)
     return conversation
 
+
 # Function to save conversation to file
-
-
 def save_conversation(file_path, conversation):
     with open(file_path, "wb") as f:
         pickle.dump(conversation, f)
